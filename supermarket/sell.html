@@ -1,0 +1,146 @@
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        * {
+            font-weight: lighter;
+            outline: none;
+        }
+        
+        table {
+            border: 0;
+        }
+        
+        tr {
+            border: solid 0px transparent;
+        }
+        
+        .search_input {
+            width: 2em;
+        }
+        
+        select {
+            border: #eee;
+            background: #fff;
+        }
+        
+        input {
+            border: 0;
+            border-bottom: solid 1px #eee;
+        }
+    </style>
+</head>
+<html style="width:100%;padding:0;margin:0;background:#fff;">
+<div id="" class="row">
+    <div id="top" style="height:6em;background:#fff;box-shadow:0px 0px 10px 2px #eee;" class="col-md-12">
+        <span class="col-md-1" style="color:#aaa;height:6em;padding:0;margin:0;line-height:3em;font-size:2em;margin-left:2em;">JXC</span>
+        <ul class="col-md-6" style="display:inline-block;">
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="index.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-home"></span>&nbsp;首页</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="goods.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;商品信息</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="sell.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;销售记录</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="instock.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;进货记录</a>
+            </li>
+
+        </ul>
+        <span class="col-md-2" style="color:#aaa;height:6em;padding:0;margin:0;line-height:3em;font-size:2em;float:right;text-align:right;margin-right:2em;">
+            <img style="border-radius:10em;border:solid 1px #0067e2;color:#fff;width:1em;" src="static/img/l2.jpg"/>&nbsp;<a id="user_name" style="font-weight:lighter;font-size:0.8em;" href="adminer.html">Admin</a>
+        </span>
+    </div>
+    <div id="body" style="padding-left:10em;padding-right:10em;margin-top:3em;margin-bottom:8em;" class="col-md-12">
+        <div id="body_left" class="col-md-2" style="border-right:solid 1px #eee;">
+            <ul style="display:inline-block;">
+                <li class="col-md-12" style="display:inline-block;margin-top:1em;"><a><span class="glyphicon glyphicon-list-alt"></span>&nbsp;销售记录</a></li>
+                <!--<li class="col-md-12" style="display:inline-block;margin-top:1em;"><a><span class="glyphicon glyphicon-list-alt"></span>&nbsp;服饰</a></li>-->
+            </ul>
+        </div>
+        <div id="body_right" style="margin-top:0em;" class="col-md-9">
+            <table class="table table-condensed table-hover">
+                <tr>
+                    <td></td>
+                    <td>销售时间</td>
+                    <td>产品编号</td>
+                    <td>数量</td>
+                    <td>单价</td>
+                    <td>总价</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input class="search_input" />--<input class="search_input" /> </td>
+                    <td><input class="search_input" /></td>
+                    <td><input class="search_input" /></td>
+                    <td><input class="search_input" /></td>
+                    <td><input class="search_input" /></td>
+                    <td><a><span class="glyphicon glyphicon-search"></span>搜索</a></td>
+                </tr>
+            </table>
+            <table class="table table-condensed table-hover" id="goods_container">
+
+
+                <tr>
+                    <td>#</td>
+                    <td>销售时间</td>
+                    <td>产品编号</td>
+                    <td>数量</td>
+                    <td>单价</td>
+                    <td>总价</td>
+                    <td><a href="javascript:refresh();"><span class="glyphicon glyphicon-refresh"></span>刷新</a>&nbsp;&nbsp;
+                        <a href="javascript:Excel.Func.export('body_right');"><span class=" glyphicon glyphicon-export "></span>导出</a></td>
+                </tr>
+
+
+            </table>
+            <script src="js/layer/layer.js"></script>
+            <script src="js/cookie.js"></script>
+            <script src="js/goods.js"></script>
+            <script src="js/excel.js"></script>
+            <script>
+                var page = 0;
+                var page_num = 2;
+                var allpage = 5;
+                goods.Operate.GetSellMaxPage(page_num);
+                goods.Operate.GetSell(page, page_num);
+                //page++;
+                var load_more = function() {
+                    allpage = $("#allpage ").val();
+                    if (page / 2 != allpage) {
+                        page += page_num;
+                        goods.Operate.GetSell(page, page_num);
+                        $("#load_more ").html("[ " + page / 2 + "/ " + allpage + "] 加载更多 ");
+                    } else {
+                        var tr = $('<tr style="display:none; "><td></td><' +
+                            'td>没有更多了... </td> <' +
+                            'td></tr>');
+                        $("#goods_container ").append(tr);
+                        tr.fadeIn(800);
+                        $("#load_more ").css("display ", "none ");
+                    }
+                };
+                var refresh = function() {
+                    $("#goods_container ").html("<tr> <" + "td> #</td> <" + "<" + "td> 售货时间 </td> <" + "td> 产品编号 </td> <" + "td> 数量 </td> <" + "td> 单价 </td> <" + "td> 总价 </td> <" + "td> <a href = 'javascript:refresh();' > <span class = 'glyphicon glyphicon-refresh' > </span>刷新</a > &nbsp; &nbsp; <a href='javascript:Excel.Func.export(\"body_right\");'> <span class = 'glyphicon glyphicon-export' > </span>导出</a></td>");
+                    page = 0;
+                    $("#load_more").fadeIn(500);
+                    goods.Operate.GetSell(page, page_num);
+                };
+            </script>
+            <div class="col-md-12">
+                <input id="allpage" type="hidden" />
+                <a id="load_more" href="javascript:load_more();">[1/231] 加载更多</a>
+            </div>
+        </div>
+    </div>
+    <div id="bottom" style="height:6em;background:#fff;border-top:solid 1px #eee;text-algin:center;" class="col-md-12">
+        <p style="text-align:center;color:#aaa;">©2017-2020 NeroYang. All Rights Reserved.</p>
+    </div>
+</div>
+
+</html>

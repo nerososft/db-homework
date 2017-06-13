@@ -1,0 +1,154 @@
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        * {
+            font-weight: lighter;
+            outline: none;
+        }
+    </style>
+</head>
+<html style="width:100%;padding:0;margin:0;background:#fff;">
+
+<div id="" class="row">
+
+    <div id="top" style="height:6em;background:#fff;box-shadow:0px 0px 10px 2px #eee;" class="col-md-12">
+        <span class="col-md-2" style="color:#aaa;height:6em;padding:0;margin:0;line-height:3em;font-size:2em;margin-left:2em;">JXC 模拟销售端口</span>
+        <ul class="col-md-3" style="display:inline-block;">
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="index.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-home"></span>&nbsp;食品</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="goods.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;服装</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="sell.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;购物车</a>
+            </li>
+        </ul>
+    </div>
+    <div id="body" style="padding-left:10em;padding-right:10em;margin-top:3em;margin-bottom:8em;" class="col-md-12">
+        <div class="col-md-12" style="padding:0;">
+            <div class="col-md-12" id="item_con" style="padding:0;">
+
+            </div>
+            <div class="col-md-12" style="text-align:center;margin-top:3em;">
+                <a>加载更多</a>
+            </div>
+        </div>
+
+    </div>
+    <script src="js/goods.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script>
+        var get_foods = function(page) {
+            $.get(
+                goods.URL.GET_GOODS("foods", page, 5), {},
+                function(d, status) {
+                    if (status) {
+                        console.log(d);
+                        $.each(d.data, function(k, v) {
+
+                            var tt = $('<div id="item" class="col-md-2" style="background:#fff;box-shadow:0px 0px 10px 1px #eee;height:20em;padding:0;margin-left:2em;margin-top:2em;">' +
+                                '<div class="col-md-12" style="background:#fa3;height:14em;color:#fff;">' +
+                                '<h1>' + v.name + '</h1>' +
+                                '<h4>' + v.pingpai + '</h4>' +
+                                '<h4>' + v.chandi + '</h4>' +
+                                '<h4>' + v.baozhiqi + '</h4>' +
+                                '</div>' +
+                                '<div class="col-md-12" style="height:6em;padding-top:1em;">' +
+                                '<div class="col-md-6" style="padding:0;margin:0;">' +
+                                '<p class="col-md-12" style="padding:0;margin:0;">' + v.num + '</p>' +
+                                '<p class="col-md-12" style="padding:0;margin:0;">' + v.price + '</p>' +
+                                '</div>' +
+                                '<a class="col-md-6" href="javascript:buy(' + v.id + ');" style="text-align:right;">购买</a>' +
+                                '</div>' +
+                                '</div>');
+                            $("#item_con").append(tt);
+                        });
+                    } else {
+                        layer.open({
+                            type: 1,
+                            offset: 't' //具体配置参考：offset参数项
+                                ,
+                            content: '<div style="padding: 20px 80px;">ooops。。。服务器宝宝开小差了。。。</div>',
+                            btn: 'OK',
+                            btnAlign: 'c' //按钮居中
+                                ,
+                            shade: 0 //不显示遮罩
+                                ,
+                            yes: function() {
+                                layer.closeAll();
+                            }
+                        });
+                    }
+                }
+            );
+        };
+        get_foods(1);
+        var get_more = function() {
+
+        };
+        var buy = function(id) {
+            $.get(goods.URL.BASE_URL + "shop/foods/" + id + "/buy", {
+
+            }, function(data, status) {
+                if (status) {
+                    if (data.status) {
+                        layer.open({
+                            type: 1,
+                            offset: 't' //具体配置参考：offset参数项
+                                ,
+                            content: '<div style="padding: 20px 80px;">购买成功</div>',
+                            btn: 'OK',
+                            btnAlign: 'c' //按钮居中
+                                ,
+                            shade: 0 //不显示遮罩
+                                ,
+                            yes: function() {
+                                layer.closeAll();
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            type: 1,
+                            offset: 't' //具体配置参考：offset参数项
+                                ,
+                            content: '<div style="padding: 20px 80px;">' + data.msg + '</div>',
+                            btn: 'OK',
+                            btnAlign: 'c' //按钮居中
+                                ,
+                            shade: 0 //不显示遮罩
+                                ,
+                            yes: function() {
+                                layer.closeAll();
+                            }
+                        });
+                    }
+                } else {
+                    layer.open({
+                        type: 1,
+                        offset: 't' //具体配置参考：offset参数项
+                            ,
+                        content: '<div style="padding: 20px 80px;">ooops。。。服务器宝宝开小差了。。。</div>',
+                        btn: 'OK',
+                        btnAlign: 'c' //按钮居中
+                            ,
+                        shade: 0 //不显示遮罩
+                            ,
+                        yes: function() {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            });
+        };
+    </script>
+
+    <div id="bottom" style="height:6em;background:#fff;border-top:solid 1px #eee;text-align:center;" class="col-md-12">
+        <p style="text-align:center;color:#aaa;">©2017-2020 NeroYang. All Rights Reserved.</p>
+    </div>
+</div>
+
+</html>

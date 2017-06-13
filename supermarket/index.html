@@ -1,0 +1,88 @@
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        * {
+            font-weight: lighter;
+            outline: none;
+        }
+    </style>
+</head>
+<html style="width:100%;padding:0;margin:0;background:#fff;">
+
+<div id="" class="row">
+
+    <div id="top" style="height:6em;background:#fff;box-shadow:0px 0px 10px 2px #eee;" class="col-md-12">
+        <span class="col-md-2" style="color:#aaa;height:6em;padding:0;margin:0;line-height:3em;font-size:2em;margin-left:2em;">JXC 后台管理</span>
+        <ul class="col-md-6" style="display:inline-block;">
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="index.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-home"></span>&nbsp;首页</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="goods.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;商品信息</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="sell.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;销售记录</a>
+            </li>
+            <li style="text-align:center;display:inline-block;height:6em;margin:0;padding:0;line-height:3em;padding-right:2em;">
+                <a href="instock.html"><span style="height:6em;line-height:6em;" class="glyphicon glyphicon-list-alt"></span>&nbsp;进货记录</a>
+            </li>
+
+        </ul>
+        <span class="col-md-2" style="color:#aaa;height:6em;padding:0;margin:0;line-height:3em;font-size:2em;float:right;text-align:right;margin-right:2em;">
+            <img style="border-radius:10em;border:solid 1px #004599;color:#fff;width:1em;" src="static/img/l2.jpg"/>&nbsp;<a id="user_name" style="font-weight:lighter;font-size:0.8em;" href="adminer.html">Admin</a>
+        </span>
+    </div>
+    <div id="body" style="padding-left:10em;padding-right:10em;margin-top:3em;margin-bottom:8em;" class="col-md-12">
+        <div id="body_left" class="col-md-2" style="border-right:solid 1px #eee;">
+            <ul style="display:inline-block;">
+                <li class="col-md-12" style="display:inline-block;margin-top:1em;"><a><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;系统公告</a></li>
+                <li class="col-md-12" style="display:inline-block;margin-top:1em;"><a href="charts.html"><span class="glyphicon glyphicon-signal"></span>&nbsp;数据图表</a></li>
+            </ul>
+        </div>
+        <div id="body_right" style="margin-top:0em;" class="col-md-9">
+            <p id="_index_tip" class="col-md-12" style="font-size:2em;">系统公告:</p>
+            <div class="col-md-12" id="goods_container">
+
+            </div>
+            <script src="js/cookie.js"></script>
+            <script src="js/goods.js"></script>
+            <script>
+                var page = 0;
+                var page_num = 2;
+                var allpage = 5;
+                goods.Operate.GetNoticeMaxPage(page_num);
+                goods.Operate.GetNotice(page, page_num);
+                //page++;
+
+                var load_more = function() {
+                    allpage = $("#allpage").val();
+                    if (page / 2 != allpage) {
+                        page += page_num;
+                        goods.Operate.GetNotice(page, page_num);
+                        $("#load_more").html("[" + page / 2 + "/" + allpage + "] 加载更多");
+                    } else {
+                        var tr = $('<tr style="display:none;"><td></td><' +
+                            'td>没有更多了... </td> <' +
+                            'td></tr>');
+                        $("#goods_container").append(tr);
+                        tr.fadeIn(800);
+                        $("#load_more").css("display", "none");
+                    }
+                };
+            </script>
+            <div class="col-md-12" style="margin-top:2em;">
+                <input id="allpage" type="hidden" />
+                <a id="load_more" href="javascript:load_more();">加载更多</a>
+            </div>
+        </div>
+
+    </div>
+    <div id="bottom" style="height:6em;background:#fff;border-top:solid 1px #eee;text-align:center;" class="col-md-12">
+        <p style="text-align:center;color:#aaa;">©2017-2020 NeroYang. All Rights Reserved.</p>
+    </div>
+</div>
+
+</html>

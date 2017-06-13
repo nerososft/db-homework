@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nero.jxc.dao.FoodsDao">
+
+    <select id="getListByPage" resultType="org.nero.jxc.entity.Food">
+--         Integer id, String name, String pingpai, Date baozhiqi, String chandi, Float price, Integer num
+        SELECT G.id,G.name,G.pingpai,G.baozhiqi,G.chandi,G.price,G.num from goods_food G limit ${page},${pagenum};
+    </select>
+    <select id="getSize" resultType="Integer">
+        select count(*) from goods_food;
+    </select>
+    <select id="getPinpai" resultType="String">
+        select P.name from pingpai P where P.id = ${id};
+    </select>
+    <select id="getPinpaiId" resultType="Integer">
+        select P.id from pingpai P where P.name = '${pingpai}';
+    </select>
+    <update id="addFoods">
+        UPDATE goods_food G SET G.num = G.num + ${num} WHERE G.id = ${id};
+    </update>
+    <delete id="xiaJia">
+        DELETE from goods_food where id = ${id}
+    </delete>
+    <!--List<Food> searchFoods(@Param("name") String name,-->
+    <!--@Param("pingpai") String pingpai,-->
+    <!--@Param("date") String date,-->
+    <!--@Param("chandi") String chandi,-->
+    <!--@Param("price_s") Float price_s,-->
+    <!--@Param("price_b") Float price_b,-->
+    <!--@Param("num_s") Float num_s,-->
+    <!--@Param("num_b") Float num_b,-->
+    <!--@Param("page") Long page,-->
+    <!--@Param("num") Long num);-->
+    <select id="searchFoods" resultType="org.nero.jxc.entity.Food">
+      SELECT G.id,G.name,G.pingpai,G.baozhiqi,G.chandi,G.price,G.num from goods_food G
+        <if test="name != 'all' or pingpai!= -1 or date!='all' or chandi!='all' or price_s!=-1 or price_s!=-1 or num_s!= -1 or num_b!=-1">
+            where
+        </if>
+        <if test="name != 'all'">
+            G.name = '${name}' and
+        </if>
+        <if test="pingpai!= -1">
+            G.pingpai=${pingpai} and
+        </if>
+        <if test="date!='all'">
+            G.baozhiqi= '${date}' and
+        </if>
+        <if test="chandi!='all'">
+            G.chandi = '${chandi}' and
+        </if>
+        <if test="price_s!=-1">
+            G.price &gt;= ${price_s} and
+        </if>
+        <if test="price_b!=-1">
+            G.price &lt; ${price_b} and
+        </if>
+        <if test="num_s!=-1">
+            G.num &gt;= ${num_s} and
+        </if>
+        <if test="num_b!=-1">
+            G.num &lt; ${num_b}
+        </if>
+      limit ${page},${num};
+    </select>
+
+    <select id="getById" resultType="org.nero.jxc.entity.Food">
+         SELECT G.id,G.name,G.pingpai,G.baozhiqi,G.chandi,G.price,G.num from goods_food G where id = ${id};
+    </select>
+
+    <delete id="deleteById">
+          UPDATE goods_food set num = num-1 where id = ${id};
+    </delete>
+
+</mapper>

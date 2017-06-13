@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nero.jxc.dao.NoticeDao">
+
+    <select id="getListByPage" resultType="org.nero.jxc.entity.Notice">
+        SELECT * from tongzhi limit ${page},${pagenum};
+    </select>
+
+    <insert id="insertNotice">
+        insert into tongzhi (type,content) VALUES ('${type}','${content}');
+    </insert>
+
+    <select id="getSize" resultType="Integer">
+        select count(*) from tongzhi;
+    </select>
+</mapper>

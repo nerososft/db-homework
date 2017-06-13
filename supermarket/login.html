@@ -1,0 +1,99 @@
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        input {
+            border: 0;
+            border-bottom: solid 1px #eee;
+        }
+        
+        * {
+            outline: none;
+            font-weight: lighter;
+        }
+    </style>
+</head>
+<html style="width:100%;padding:0;margin:0;">
+<div id="top" class="row" style="box-shadow:0px 0px 10px 2px #eee;height:6em;">
+    <p style="color:#aaa;height:6em;padding:0;margin:0;line-height:3em;font-size:2em;margin-left:2em;">JXC<i style="font-size:0.5em;"> ·一个为大作业而作的进销存系统</i></p>
+</div>
+<div id="body" style="padding-left:10em;padding-right:10em;margin-top:8em;margin-bottom:8em;" class="col-md-12">
+    <div id="body_left" class="col-md-7">
+        <div class="col-md-12" style="background:url(static/img/l.jpg);background-size:100% 100%;color:#fff;">
+            <!--<img class="col-md-12" src="static/img/l.jpg" />-->
+            <p></p>
+
+            <strong>这是个简单的进销存系统，为数据库管理课程学期大作业而作，功能如下：</strong>
+            <hr>
+            <p></p>
+            <p>1. 管理员登陆与简单权限管理</p>
+            <p>2. 商品信息查询与修改</p>
+            <p>3. 自动缺货通知</p>
+            <p>4. 进货信息录入</p>
+            <p>5. 食品过期通知</p>
+            <p>6. 商品下架</p>
+            <p>7. Excel报表导出</p>
+            <p></p>
+
+            <p>注 1： 采购部门测试账号：<strong>yang</strong> 密码：<strong>yang</strong> </p>
+            <p>注 2： 管理部门测试账号：<strong>admin</strong> 密码：<strong>yang</strong> </p>
+        </div>
+    </div>
+    <div id="body_right" style="margin-top:0em;" class="col-md-5">
+        <p style="color:#aaa;font-size:2em;margin-top:2em;">登录:</p>
+        <p id="tip"></p>
+        <input class="col-md-12" id="username" style="margin-top:2em;" placeholder="管理员用户名" />
+        <input class="col-md-12" id="password" style="margin-top:2em;" type="password" placeholder="管理员密码" />
+        <div class="col-md-12" style="margin-top:2em;"> <a href="javascript:login();">登录</a></div>
+    </div>
+</div>
+<script src="js/cookie.js"></script>
+<script src="js/goods.js"></script>
+<script>
+    if (Cookie.getCookie("username") != null && document.cookie.indexOf("username=") != -1) {
+        var level = Cookie.getCookie("level");
+        var ll = '';
+        switch (level) {
+            case '0':
+                ll = '采购部门';
+                break;
+            case '1':
+                ll = '管理部门';
+                break;
+            default:
+                ll = '管理员';
+                break;
+        }
+        var cc = "[" + ll + "] " + Cookie.getCookie("username");
+        var ll = $("<div class='col-md-12' style='text-align:center;'><img style='width:10em;border-radius:100em;border:solid 4px #004599;margin-top:3em;' src='static/img/l2.jpg' />" +
+            "<p style='font-size:2em;margin-top:1em;'>" + cc + "</p>" +
+            "<a href='javascript:window.location.href=\"index.html\"'>登录</a>&nbsp;&nbsp;" + "<a href = 'javascript:Cookie.deleteAllCookie();window.location.reload();' > 切换账号 </a>" +
+            "</div>");
+        $("#body_right").html(ll);
+    }
+    var login = function() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if (username == "") {
+            var tip = $("<span style='display:none;color:#ff2222;' class='glyphicon glyphicon-remove'>请输入用户名</span>");
+            $("#tip").html(tip)
+            tip.fadeIn(800);
+        } else if (password == "") {
+            var tip = $("<span style='display:none;color:#ff2222;' class='glyphicon glyphicon-remove'>请输入密码</span>");
+            $("#tip").html(tip)
+            tip.fadeIn(800);
+        } else {
+            console.log("username:", username);
+            console.log("password:", password);
+            goods.Operate.Login(username, password);
+        }
+    }
+</script>
+<div id="bottom" style="height:6em;background:#fff;border-top:solid 1px #eee;text-align:center;" class="col-md-12">
+    <p style="text-align:center;color:#aaa;">©2017-2020 NeroYang. All Rights Reserved.</p>
+</div>
+</div>
+
+</html>
